@@ -2,19 +2,19 @@ name: Build
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches: ["master"]
     paths-ignore:
-     - '**/*.md'
-     - '**/*.bat'
-     - '**/*.sh'
-     - '**/*.html'  # Documentation
-     - '**/*.js'
-     - '**/*.png'
-     - '**/*.css'
-     - '**/*.dox'
-     - '**/*.svg'
-     - '**/*.bmp'
-     - '**/*.ico'
+      - "**/*.md"
+      - "**/*.bat"
+      - "**/*.sh"
+      - "**/*.html" # Documentation
+      - "**/*.js"
+      - "**/*.png"
+      - "**/*.css"
+      - "**/*.dox"
+      - "**/*.svg"
+      - "**/*.bmp"
+      - "**/*.ico"
 
 jobs:
   build:
@@ -24,16 +24,18 @@ jobs:
 
     strategy:
       matrix:
-        operatingsystems: [windows-latest] 
-        buildtypes: [Release] 
+        operatingsystems: [windows-latest]
+        buildtypes: [Release]
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-        submodules: recursive
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
 
-    - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+      - uses: seanmiddleditch/gha-setup-ninja@master
 
-    - name: Building Engine
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target tobot-engine
+      - name: Configure CMake
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -G Ninja
+
+      - name: Building Engine
+        run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target tobot-engine
